@@ -41,10 +41,11 @@ namespace src
 
             gameObject.AddComponent<MeshFilter>().mesh = _mesh;
             gameObject.AddComponent<MeshRenderer>().material = materials[depth];
-//            gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.white, Color.blue, depth / (float)maxDepth);
 
             if (depth < maxDepth)
+            {
                 foreach (var dir in Directions.d)
+                {
                     if (!dir.Equals(-from))
                     {
                         var child = new GameObject(depth + 1 + " depth").AddComponent<Fractal>();
@@ -52,6 +53,8 @@ namespace src
 
                         branches[depth + 1].Add(child.gameObject);
                     }
+                }
+            }
         }
 
         private void Init(Fractal parent, Vector3 dir)
@@ -60,21 +63,26 @@ namespace src
             _mesh = parent._mesh;
             scaller = parent.scaller;
             depth = parent.depth + 1;
-
-            var parentTrans = parent.transform;
-            transform.localScale = parentTrans.localScale * scaller;
-//            transform.localScale = Vector3.one * scaller;
-            transform.parent = rootTransform;//parentTrans;
-            var shift = new Vector3(
-                parentTrans.localScale.x / 2 + transform.localScale.x / 2,
-                parentTrans.localScale.y / 2 + transform.localScale.y / 2,
-                parentTrans.localScale.z / 2 + transform.localScale.z / 2
-            );
             
+            transform.parent = parent.transform;
+            
+            transform.localScale = Vector3.one * scaller;
+
+            var shift = new Vector3(
+                0.5f + scaller / 2,
+                0.5f + scaller / 2,
+                0.5f + scaller / 2
+            );
             shift = shift.Mult(dir);
-            transform.position = parentTrans.position + shift;
+            transform.localPosition = shift;
         }
 
+        private void Update()
+        {
+            float speed = 60 * Time.deltaTime * Mathf.Pow(scaller, depth);
+            transform.Rotate(from.Mult(-new Vector3(speed, speed,speed)));
+        }
+        
         public static void Decrease()
         {
             if (currMaxDepth >= 1)

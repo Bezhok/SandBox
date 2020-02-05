@@ -14,7 +14,7 @@ namespace src
         {
             GetInnput();
             
-            Fractal.rootTransform.Rotate(60*Time.deltaTime, 30*Time.deltaTime, 60*Time.deltaTime);
+//            Fractal.rootTransform.Rotate(60*Time.deltaTime, 30*Time.deltaTime, 60*Time.deltaTime);
         }
 
         private void GetInnput()
