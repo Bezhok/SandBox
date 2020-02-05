@@ -1,75 +1,96 @@
-﻿using System;
-using System.Collections.Generic;
-using src;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Fractal : MonoBehaviour
+namespace src
 {
-    [SerializeField] private Material _material;
-    [SerializeField] private Mesh _mesh;
-    private int depth = 1;
-
-    private Vector3 from = Vector3.up;
-
-    [Range(0, 6)] [SerializeField] private int maxDepth = 5;
-
-    [Range(0, 1)] [SerializeField] private float scaller = 0.5f;
-    
-    // Start is called before the first frame update
-    private void Start()
+    public class Fractal : MonoBehaviour
     {
-        gameObject.AddComponent<MeshFilter>().mesh = _mesh;
-        gameObject.AddComponent<MeshRenderer>().material = _material;
+        private static readonly int maxDepth = 5;
+        private static int currMaxDepth = maxDepth;
+        
+        private static List<GameObject>[] branches;
+        private static Material[] materials;
+        
+        [SerializeField] private Material _material;
+        [SerializeField] private Mesh _mesh;
+        private int depth;
 
-        if (depth <= maxDepth)
-            foreach (var dir in Directions.d)
-                if (!dir.Equals(-from))
+        private Vector3 from = Vector3.up;
+
+        public static Transform rootTransform;
+        [Range(0, 1)] [SerializeField] private float scaller = 0.5f;
+        
+        private void Start()
+        {
+            if (branches == null)
+            {
+                branches = new List<GameObject>[maxDepth + 1];
+                materials = new Material[maxDepth + 1];
+
+                for (var i = 0; i < branches.Length; i++)
                 {
-                    var child = new GameObject(depth + " depth").AddComponent<Fractal>();
-                    child.Init(this, dir);
+                    branches[i] = new List<GameObject>();
+                    materials[i] = new Material(_material);
+                    materials[i].color = Color.Lerp(Color.green, Color.blue, i / (float)maxDepth);
+                    materials[i].color = Color.Lerp(Color.gray, Color.black, i / (float)maxDepth);
                 }
-    }
 
-    private void Init(Fractal parent, Vector3 dir)
-    {
-        from = dir;
-        _mesh = parent._mesh;
-        _material = parent._material;
-        maxDepth = parent.maxDepth;
-        scaller = parent.scaller;
-        depth = parent.depth + 1;
+                branches[0].Add(gameObject);
+                rootTransform = gameObject.transform;
+            }
 
-        var parentTrans = parent.transform;
-        transform.localScale = parentTrans.localScale * scaller;
-        var shift = new Vector3(
-            parentTrans.localScale.x / 2 + transform.localScale.x / 2,
-            parentTrans.localScale.y / 2 + transform.localScale.y / 2,
-            parentTrans.localScale.z / 2 + transform.localScale.z / 2
-        );
+            gameObject.AddComponent<MeshFilter>().mesh = _mesh;
+            gameObject.AddComponent<MeshRenderer>().material = materials[depth];
+//            gameObject.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.white, Color.blue, depth / (float)maxDepth);
 
-        shift = Mult(shift, dir);
-        transform.position = parentTrans.position + shift;
-    }
+            if (depth < maxDepth)
+                foreach (var dir in Directions.d)
+                    if (!dir.Equals(-from))
+                    {
+                        var child = new GameObject(depth + 1 + " depth").AddComponent<Fractal>();
+                        child.Init(this, dir);
 
-    // Update is called once per frame
-    private void Update()
-    {
-        GetInnput();
-    }
-
-    private void GetInnput()
-    {
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            
-        } else if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            
+                        branches[depth + 1].Add(child.gameObject);
+                    }
         }
-    }
 
-    private Vector3 Mult(Vector3 l, Vector3 r)
-    {
-        return new Vector3(l.x * r.x, l.y * r.y, l.z * r.z);
+        private void Init(Fractal parent, Vector3 dir)
+        {
+            from = dir;
+            _mesh = parent._mesh;
+            scaller = parent.scaller;
+            depth = parent.depth + 1;
+
+            var parentTrans = parent.transform;
+            transform.localScale = parentTrans.localScale * scaller;
+//            transform.localScale = Vector3.one * scaller;
+            transform.parent = rootTransform;//parentTrans;
+            var shift = new Vector3(
+                parentTrans.localScale.x / 2 + transform.localScale.x / 2,
+                parentTrans.localScale.y / 2 + transform.localScale.y / 2,
+                parentTrans.localScale.z / 2 + transform.localScale.z / 2
+            );
+            
+            shift = shift.Mult(dir);
+            transform.position = parentTrans.position + shift;
+        }
+
+        public static void Decrease()
+        {
+            if (currMaxDepth >= 1)
+            {
+                foreach (var o in branches[currMaxDepth]) o.SetActive(false);
+                currMaxDepth--;
+            }
+        }
+
+        public static void Increase()
+        {
+            if (currMaxDepth < maxDepth)
+            {
+                currMaxDepth++;
+                foreach (var o in branches[currMaxDepth]) o.SetActive(true);
+            }
+        }
     }
 }

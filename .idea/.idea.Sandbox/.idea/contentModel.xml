@@ -21,6 +21,7 @@
           <e p="Directions.cs" t="Include" />
           <e p="Fractal.cs" t="Include" />
           <e p="Main.cs" t="Include" />
+          <e p="Vector3Extension.cs" t="Include" />
         </e>
       </e>
       <e p="obj" t="ExcludeRecursive" />

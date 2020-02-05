@@ -130,6 +130,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 44514391}
+  - component: {fileID: 44514392}
   m_Layer: 0
   m_Name: Main
   m_TagString: Untagged
@@ -151,6 +152,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &44514392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 44514390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6be1ebca527a871409845141e6c6604a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &447765570
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,7 +175,7 @@ GameObject:
   - component: {fileID: 447765575}
   - component: {fileID: 447765571}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Fractal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -180,10 +193,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b849cc181738b14a8bbf58d620673a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scaller: 0.5
-  maxDepth: 5
-  _mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   _material: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  _mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  scaller: 0.5
 --- !u!4 &447765575
 Transform:
   m_ObjectHideFlags: 0
