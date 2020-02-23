@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
     <e p="C:\Users\cheki\.Rider2019.2\system\extResources" t="IncludeRecursive" />
@@ -18,9 +18,11 @@
           </e>
         </e>
         <e p="src" t="Include">
+          <e p="ColorGrid.cs" t="Include" />
           <e p="Directions.cs" t="Include" />
           <e p="Fractal.cs" t="Include" />
           <e p="Main.cs" t="Include" />
+          <e p="Surface.cs" t="Include" />
           <e p="Vector3Extension.cs" t="Include" />
         </e>
       </e>
