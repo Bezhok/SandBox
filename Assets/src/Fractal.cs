@@ -73,14 +73,14 @@ namespace src
                 0.5f + scaller / 2,
                 0.5f + scaller / 2
             );
-            shift = shift.Mult(dir);
+            shift = shift.MultRes(dir);
             transform.localPosition = shift;
         }
 
         private void Update()
         {
             float speed = 60 * Time.deltaTime * Mathf.Pow(scaller, depth);
-            transform.Rotate(from.Mult(-new Vector3(speed, speed,speed)));
+            transform.Rotate(from.MultRes(-new Vector3(speed, speed,speed)));
         }
         
         public static void Decrease()
