@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using src.Transformations;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -12,12 +14,37 @@ namespace src
         private GameObject[] _points;
         private float _size = 5f;
         private bool isFixedSize = false;
+
+        private List<Transformation> _transformations;
         private void Awake()
         {
+            _transformations = new List<Transformation>();
             GenerateGrid();
         }
 
-        
+        private void Update()
+        {
+            GetComponents(_transformations);
+            
+            int idx = 0;
+            for (int i = 0; i < resolution; i++)
+            {
+                for (int j = 0; j < resolution; j++)
+                {
+                    for (int k = 0; k < resolution; k++, idx++)
+                    {
+                        var pos = _points[idx].transform.localPosition;
+                        for (int l = 0; l < _transformations.Count; l++)
+                        {
+                            pos = _transformations[l].Apply(pos);
+                        }
+                        
+                        _points[idx].transform.localPosition = pos;
+                    }
+                }
+            }
+        }
+
         private void GenerateGrid()
         {
             if (_prefab == null) throw new NullReferenceException();
@@ -44,8 +71,8 @@ namespace src
 
             if (isFixedSize)
             {
-                float scaller = 0.5f / resolution;
-                obj.transform.localScale = new Vector3(scaller, scaller, scaller);
+                float scale = 0.5f / resolution;
+                obj.transform.localScale = new Vector3(scale, scale, scale);
 
                 obj.GetComponent<MeshRenderer>().material.color = new Color((float) i / resolution,
                     (float) j / resolution, (float) k / resolution);
@@ -56,15 +83,15 @@ namespace src
             }
             else
             {
-                float scaller = 0.5f;
-                obj.transform.localScale = new Vector3(scaller, scaller, scaller);
+                float scale = 0.5f;
+                obj.transform.localScale = new Vector3(scale, scale, scale);
 
                 obj.GetComponent<MeshRenderer>().material.color = new Color((float) i / resolution,
                     (float) j / resolution, (float) k / resolution);
 
                 float shift = resolution * 0.5f;
-                obj.transform.localPosition = new Vector3((float) i *scaller*2  - shift,
-                    (float) j *scaller*2- shift, (float) k *scaller*2  - shift);
+                obj.transform.localPosition = new Vector3((float) i *scale*2  - shift,
+                    (float) j *scale*2- shift, (float) k *scale*2  - shift);
             }
 
             return obj;

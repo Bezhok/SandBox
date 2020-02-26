@@ -23,6 +23,11 @@
           <e p="Fractal.cs" t="Include" />
           <e p="Main.cs" t="Include" />
           <e p="Surface.cs" t="Include" />
+          <e p="transformations" t="Include">
+            <e p="Scaling.cs" t="Include" />
+            <e p="Transformation.cs" t="Include" />
+            <e p="Translation.cs" t="Include" />
+          </e>
           <e p="Vector3Extension.cs" t="Include" />
         </e>
       </e>
