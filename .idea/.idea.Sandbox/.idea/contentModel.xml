@@ -17,6 +17,11 @@
             </e>
           </e>
         </e>
+        <e p="Resources" t="Include">
+          <e p="Shaders" t="Include">
+            <e p="TestShader.shader" t="Include" />
+          </e>
+        </e>
         <e p="src" t="Include">
           <e p="ColorGrid.cs" t="Include" />
           <e p="Directions.cs" t="Include" />
